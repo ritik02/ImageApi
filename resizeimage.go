@@ -10,6 +10,7 @@ func ResizeImage(w http.ResponseWriter,finalfile string, inputfile string, width
   imagick.Initialize()
   defer imagick.Terminate()
   mw := imagick.NewMagickWand()
+  defer mw.Destroy()
   err := mw.ReadImage(inputfile)
   if err != nil {
     HandleError(w,"Invalid Image Type")
