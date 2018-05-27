@@ -30,3 +30,15 @@ func TestParamters(t *testing.T) {
      	t.Errorf("handler returned unexpected body: got %v want %v", actual, expected)
 	}
 }
+
+func TestFileAbsence(t *testing.T) {
+     req := httptest.NewRequest(http.MethodGet, "/api/resize?file=test3.jpg&width=600&height=500", nil)
+     rw := httptest.NewRecorder()
+     http.DefaultServeMux.ServeHTTP(rw, req)
+     expected := "No Such file found!"
+     actual := strings.Contains(rw.Body.String(),expected)
+     if actual == true {
+     	t.Errorf("handler returned unexpected body: got %v want %v", actual, expected)
+     }
+
+}
