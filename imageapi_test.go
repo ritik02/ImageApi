@@ -63,3 +63,49 @@ func TestWidthandHeightRange(t *testing.T) {
      	t.Errorf("handler returned unexpected body: got %v want %v", actual, expected)
      }
 }
+
+func TestFileResponseAndContentTypeIfValidParameters(t *testing.T) {
+     req := httptest.NewRequest(http.MethodGet, "/api/resize?file=test.jpg&width=500&height=400", nil)
+     rw := httptest.NewRecorder()
+     http.DefaultServeMux.ServeHTTP(rw, req)
+     expected := "image/jpeg"
+     actual := strings.Contains(rw.Header().Get("Content-Type"),expected)
+     if actual == false || len(rw.Body.String()) < 1 {
+     	t.Errorf("handler returned unexpected body: got %v want %v .. %v", actual, expected,rw.Header().Get("Content-type"))
+     }
+}
+
+func TestInvalidFileType(t *testing.T) {
+     req := httptest.NewRequest(http.MethodGet, "/api/resize?file=text.txt&width=500&height=400", nil)
+     rw := httptest.NewRecorder()
+     http.DefaultServeMux.ServeHTTP(rw, req)
+     expected := "Invalid Image Type"
+     actual := strings.Contains(rw.Body.String(), expected)
+     if actual == false {
+     	t.Errorf("handler returned unexpected body: got %v want %v v", actual, expected)
+     }
+}
+
+func TestForPNGImages(t *testing.T) {
+  req := httptest.NewRequest(http.MethodGet, "/api/resize?file=test2.png&width=500&height=400", nil)
+     rw := httptest.NewRecorder()
+     http.DefaultServeMux.ServeHTTP(rw, req)
+     expected := "image/png"
+     actual := strings.Contains(rw.Header().Get("Content-Type"),expected)
+     if actual == false || len(rw.Body.String()) < 1 {
+     	t.Errorf("handler returned unexpected body: got %v want %v .. %v", actual, expected,rw.Header().Get("Content-type"))
+     }
+}
+
+func TestForCachedFile(t *testing.T) {
+  req := httptest.NewRequest(http.MethodGet, "/api/resize?file=test2.png&width=500&height=400", nil)
+     rw := httptest.NewRecorder()
+     http.DefaultServeMux.ServeHTTP(rw, req)
+     expected := "image/png"
+     actual := strings.Contains(rw.Header().Get("Content-Type"),expected)
+     filename := "images/cached/test2.png_final_500_400.png"
+     if actual == false || len(rw.Body.String()) < 1 && DoesFileExist(filename) {
+     	t.Errorf("handler returned unexpected body: got %v want %v .. %v", actual, expected,rw.Header().Get("Content-type"))
+     }
+}
+
