@@ -1,4 +1,4 @@
-This is a Go implemented REST API for Resizing images.
+This is a Go implemented REST API for Resizing images. [![Build Status](https://travis-ci.com/ritik02/ImageApi.svg?branch=master)](https://travis-ci.com/ritik02/ImageApi)
 
 STEPS TO FOLLOW -
 
@@ -15,5 +15,3 @@ BASIC FUNCTIONING -
     The Code uses "ImageMagick" for Resizing Images based upon given width and height in URL parameters.
     The Code has all necessary validations for checking parameter and image types .
     There is also implementation of caching using file system if the image is already saved in "images/cached/" directory.
-
-  
